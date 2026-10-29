@@ -1,56 +1,61 @@
-#Members Names:
-    #Mohamed Ahmed Ibrahim     231002063
-    #Mahmoud Hasan             231000496
-    #Shehab Sayed              231002292
-    #Mazen Kamal               231002151
-#Course code: CSCI102
-#Lecture number: 07
-#Lab number: 07A
-
-#importing, initialization,and screen
+# importing, initialization,and screen
 import pygame, sys
 from Menu import Menu
+from util import load_image, load_sound
+
+white, gray, dark_gray = (255, 255, 255), (200, 200, 200), (150, 150, 150)
+
+def sound_config():
+    music = load_sound("assets/Sounds/background.mp3")
+    music.set_volume(0.4)
+    music.play(-1)
+
+def set_title():
+    pygame.display.set_caption("Image matching")
+
+def set_icon():
+    pygame.display.set_icon(load_image("assets/GUI/Cherries.ico"))
+
+def play_btn_config():
+    play_btn = load_image("assets/GUI/play.png")
+    play_btn = pygame.transform.scale(play_btn,(400,100))
+    return play_btn
+
+def play_btn_rect_config():
+    play_btn_rect = play_btn.get_rect()
+    play_btn_rect.left, play_btn_rect.top = 300, 480
+    return play_btn_rect
+
+
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((1000, 600))
 
-#Sound
-BackgroundMusic = pygame.mixer.Sound("Sounds\\background.mp3")
-BackgroundMusic.set_volume(0.4)
-BackgroundMusic.play(-1)
+sound_config()
+set_title()
+set_icon()
 
-# title and icon
-pygame.display.set_caption("Image matching")
-icon = pygame.image.load("GUI\\Cherries.ico")
-pygame.display.set_icon(icon)
+play_btn = play_btn_config();
+play_btn_rect = play_btn_rect_config();
 
-#play button
-play_butn2 = pygame.image.load("GUI\\play.png")
-play_butn2 = pygame.transform.scale(play_butn2,(400,100))
-play_butn2_rect = play_butn2.get_rect()
-play_butn2_rect.left, play_butn2_rect.top = 300, 480
+play_rect = pygame.Rect(405, 250, 250, 80)
+more_rect = pygame.Rect(405, 350, 250, 80)
 
-# colors
-white, gray, dark_gray = (255, 255, 255), (200, 200, 200), (150, 150, 150)
-
-# button colors
 play_color = white
 play_hover_color = gray
 more_color = white
 more_hover_color = gray
 
 # button variables
-play_rect = pygame.Rect(405, 250, 250, 80)
-more_rect = pygame.Rect(405, 350, 250, 80)
 
 #True if more button was clicked
 more = False
 
 #Home background
-background = pygame.image.load("GUI\\background.jpeg")
+background = load_image("assets/GUI/background.jpeg")
 screen.blit(background,(0,0))
 
-more_menu = pygame.image.load("GUI\\More menu.png")
+more_menu = load_image("assets/GUI/More menu.png")
 
 #Drawing buttons
 pygame.draw.rect(screen, play_color, play_rect)
@@ -63,6 +68,7 @@ screen.blit(text, (495, play_rect.y + 30))
 
 text = font.render("MORE", True, (0, 0, 0))     #more
 screen.blit(text, (490, more_rect.y + 30))
+
 
 while True:
     mouse_pos = pygame.mouse.get_pos()
@@ -99,8 +105,8 @@ while True:
             elif more_rect.collidepoint(mouse_pos):
                 screen.blit(more_menu,(0,0))
                 more = True
-                screen.blit(play_butn2, play_butn2_rect)
-            elif play_butn2_rect.collidepoint(mouse_pos) and more==True:
+                screen.blit(play_btn, play_btn_rect)
+            elif play_btn_rect.collidepoint(mouse_pos) and more==True:
                 more = False
                 Menu()
 
